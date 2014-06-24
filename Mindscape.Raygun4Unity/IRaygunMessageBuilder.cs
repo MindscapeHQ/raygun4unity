@@ -13,6 +13,8 @@ namespace Mindscape.Raygun4Unity
 
     IRaygunMessageBuilder SetExceptionDetails(string message, string stackTrace, string type);
 
+    IRaygunMessageBuilder SetExceptionDetails(Exception exception);
+
     IRaygunMessageBuilder SetClientDetails();
 
     IRaygunMessageBuilder SetEnvironmentDetails();

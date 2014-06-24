@@ -88,13 +88,36 @@ namespace Mindscape.Raygun4Unity
       }
     }
 
-    /*/// <summary>
+    /// <summary>
+    /// Transmits Unity exception information to Raygun.io synchronously.
+    /// </summary>
+    /// <param name="message">The exception message.</param>
+    /// <param name="stackTrace">The stack trace information.</param>
+    public void Send(string message, string stackTrace)
+    {
+      Send(message, stackTrace, null, null);
+    }
+
+    /// <summary>
+    /// Transmits Unity exception information to Raygun.io synchronously specifying a list of string tags associated
+    /// with the message for identification, as well as sending a key-value collection of custom data.
+    /// </summary>
+    /// <param name="message">The exception message.</param>
+    /// <param name="stackTrace">The stack trace information.</param>
+    /// <param name="tags">A list of strings associated with the message.</param>
+    /// <param name="userCustomData">A key-value collection of custom data that will be added to the payload.</param>
+    public void Send(string message, string stackTrace, IList<string> tags, IDictionary userCustomData)
+    {
+      Send(BuildMessage(message, stackTrace, null, tags, userCustomData));
+    }
+
+    /// <summary>
     /// Transmits an exception to Raygun.io synchronously.
     /// </summary>
     /// <param name="exception">The exception to deliver.</param>
     public void Send(Exception exception)
     {
-      Send(exception, null, (IDictionary)null);
+      Send(exception, null, null);
     }
 
     /// <summary>
@@ -107,7 +130,7 @@ namespace Mindscape.Raygun4Unity
     public void Send(Exception exception, IList<string> tags, IDictionary userCustomData)
     {
       Send(BuildMessage(exception, tags, userCustomData));
-    }*/
+    }
 
     internal RaygunMessage BuildMessage(string message, string stackTrace, string type, IList<string> tags, IDictionary userCustomData)
     {
@@ -117,6 +140,23 @@ namespace Mindscape.Raygun4Unity
         .SetEnvironmentDetails()
         .SetMachineName(Environment.MachineName)
         .SetExceptionDetails(message, stackTrace, type)
+        .SetClientDetails()
+        .SetVersion(ApplicationVersion)
+        .SetTags(tags)
+        .SetUserCustomData(userCustomData)
+        .SetUser(User)
+        .Build();
+      return raygunMessage;
+    }
+
+    internal RaygunMessage BuildMessage(Exception exception, IList<string> tags, IDictionary userCustomData)
+    {
+      //exception = StripWrapperExceptions(exception)
+
+      RaygunMessage raygunMessage = RaygunMessageBuilder.New
+        .SetEnvironmentDetails()
+        .SetMachineName(Environment.MachineName)
+        .SetExceptionDetails(exception)
         .SetClientDetails()
         .SetVersion(ApplicationVersion)
         .SetTags(tags)

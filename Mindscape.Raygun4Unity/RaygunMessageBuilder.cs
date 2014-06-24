@@ -47,6 +47,12 @@ namespace Mindscape.Raygun4Unity
       return this;
     }
 
+    public IRaygunMessageBuilder SetExceptionDetails(Exception exception)
+    {
+      _raygunMessage.Details.Error = new RaygunErrorMessage(exception);
+      return this;
+    }
+
     public IRaygunMessageBuilder SetClientDetails()
     {
       _raygunMessage.Details.Client = new RaygunClientMessage();
