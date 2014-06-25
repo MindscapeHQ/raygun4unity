@@ -89,6 +89,14 @@ namespace Mindscape.Raygun4Unity
     }
 
     /// <summary>
+    /// Gets the <see cref="RaygunClient"/> created by the Attach method.
+    /// </summary>
+    public static RaygunClient Current
+    {
+      get { return _current; }
+    }
+
+    /// <summary>
     /// Transmits Unity exception information to Raygun.io synchronously.
     /// </summary>
     /// <param name="message">The exception message.</param>
