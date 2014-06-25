@@ -19,10 +19,10 @@ namespace Mindscape.Raygun4Unity.Messages
     {
     }
 
-    public RaygunErrorMessage(string message, string stackTrace, string type)
+    public RaygunErrorMessage(string message, string stackTrace)
     {
       Message = message;
-      ClassName = type ?? "Exception";
+      //ClassName = type ?? "Exception";
 
       StackTrace = BuildStackTrace(stackTrace);
     }
@@ -48,76 +48,83 @@ namespace Mindscape.Raygun4Unity.Messages
     {
       List<RaygunErrorStackTraceLineMessage> lines = new List<RaygunErrorStackTraceLineMessage>();
 
-      if (stackTrace != null)
+      if (stackTrace == null)
       {
-        try
+        RaygunErrorStackTraceLineMessage line = new RaygunErrorStackTraceLineMessage();
+        line.FileName = "none";
+        line.LineNumber = 0;
+
+        lines.Add(line);
+        return lines.ToArray();
+      }
+
+      try
+      {
+        string[] stackTraceLines = stackTrace.Split('\r', '\n');
+        foreach (string stackTraceLine in stackTraceLines)
         {
-          string[] stackTraceLines = stackTrace.Split('\r', '\n');
-          foreach (string stackTraceLine in stackTraceLines)
+          if (!String.IsNullOrEmpty(stackTraceLine))
           {
-            if (!String.IsNullOrEmpty(stackTraceLine))
+            int lineNumber = 0;
+            string fileName = null;
+            string methodName = null;
+            string className = null;
+            string stackTraceLn = stackTraceLine;
+            // Line number
+            int index = stackTraceLine.LastIndexOf(":");
+            if (index > 0)
             {
-              int lineNumber = 0;
-              string fileName = null;
-              string methodName = null;
-              string className = null;
-              string stackTraceLn = stackTraceLine;
-              // Line number
-              int index = stackTraceLine.LastIndexOf(":");
-              if (index > 0)
+              string lineNumberString = stackTraceLn.Substring(index + 1).Replace(")", "");
+              bool success = int.TryParse(lineNumberString, out lineNumber);
+              if (success)
               {
-                string lineNumberString = stackTraceLn.Substring(index + 1).Replace(")", "");
-                bool success = int.TryParse(lineNumberString, out lineNumber);
-                if (success)
+                stackTraceLn = stackTraceLn.Substring(0, index);
+                // File name
+                index = stackTraceLn.LastIndexOf(" (at ");
+                if (index > 0)
                 {
+                  fileName = stackTraceLn.Substring(index + 5);
                   stackTraceLn = stackTraceLn.Substring(0, index);
-                  // File name
-                  index = stackTraceLn.LastIndexOf(" (at ");
+                  // Method name
+                  index = stackTraceLn.LastIndexOf("(");
                   if (index > 0)
                   {
-                    fileName = stackTraceLn.Substring(index + 5);
-                    stackTraceLn = stackTraceLn.Substring(0, index);
-                    // Method name
-                    index = stackTraceLn.LastIndexOf("(");
+                    index = stackTraceLn.LastIndexOf(".", index);
                     if (index > 0)
                     {
-                      index = stackTraceLn.LastIndexOf(".", index);
-                      if (index > 0)
-                      {
-                        methodName = stackTraceLn.Substring(index + 1).Trim();
-                        methodName = methodName.Replace(" (", "(");
-                        stackTraceLn = stackTraceLn.Substring(0, index);
-                      }
+                      methodName = stackTraceLn.Substring(index + 1).Trim();
+                      methodName = methodName.Replace(" (", "(");
+                      stackTraceLn = stackTraceLn.Substring(0, index);
                     }
-                    // Class name
-                    className = stackTraceLn;
                   }
-                  else
-                  {
-                    fileName = stackTraceLn;
-                  }
+                  // Class name
+                  className = stackTraceLn;
+                }
+                else
+                {
+                  fileName = stackTraceLn;
                 }
               }
-              else
-              {
-                fileName = stackTraceLn;
-              }
-              RaygunErrorStackTraceLineMessage line = new RaygunErrorStackTraceLineMessage();
-              line.FileName = fileName;
-              line.LineNumber = lineNumber;
-              line.MethodName = methodName;
-              line.ClassName = className;
-
-              lines.Add(line);
             }
-          }
-          if (lines.Count > 0)
-          {
-            return lines.ToArray();
+            else
+            {
+              fileName = stackTraceLn;
+            }
+            RaygunErrorStackTraceLineMessage line = new RaygunErrorStackTraceLineMessage();
+            line.FileName = fileName;
+            line.LineNumber = lineNumber;
+            line.MethodName = methodName;
+            line.ClassName = className;
+
+            lines.Add(line);
           }
         }
-        catch { }
+        if (lines.Count > 0)
+        {
+          return lines.ToArray();
+        }
       }
+      catch { }
 
       return lines.ToArray();
     }
@@ -138,84 +145,88 @@ namespace Mindscape.Raygun4Unity.Messages
       }
       try
       {
-        string[] stackTraceLines = stackTraceStr.Split('\r', '\n');
+        string[] stackTraceLines = stackTraceStr.Split('\n');
         foreach (string stackTraceLine in stackTraceLines)
         {
-          if (!String.IsNullOrEmpty(stackTraceLine))
+          int lineNumber = 0;
+          string fileName = null;
+          string methodName = null;
+          string className = null;
+          string stackTraceLn = stackTraceLine;
+          // Line number
+          int index = stackTraceLine.LastIndexOf(":");
+          if (index > 0)
           {
-            int lineNumber = 0;
-            string fileName = null;
-            string methodName = null;
-            string className = null;
-            string stackTraceLn = stackTraceLine;
-            // Line number
-            int index = stackTraceLine.LastIndexOf(":line ");
-            if (index > 0)
+            bool success = int.TryParse(stackTraceLn.Substring(index + 1), out lineNumber);
+            if (success)
             {
-              bool success = int.TryParse(stackTraceLn.Substring(index + 6), out lineNumber);
-              if (success)
+              stackTraceLn = stackTraceLn.Substring(0, index);
+              // File name
+              index = stackTraceLn.LastIndexOf("] in ");
+              if (index > 0)
               {
+                fileName = stackTraceLn.Substring(index + 5);
+                if ("<filename unknown>".Equals(fileName))
+                {
+                  fileName = null;
+                }
                 stackTraceLn = stackTraceLn.Substring(0, index);
-                // File name
-                index = stackTraceLn.LastIndexOf(") in ");
+                // Method name
+                index = stackTraceLn.LastIndexOf("(");
                 if (index > 0)
                 {
-                  fileName = stackTraceLn.Substring(index + 5);
-                  if ("<filename unknown>".Equals(fileName))
-                  {
-                    fileName = null;
-                  }
-                  stackTraceLn = stackTraceLn.Substring(0, index + 1);
-                  // Method name
-                  index = stackTraceLn.LastIndexOf("(");
+                  index = stackTraceLn.LastIndexOf(".", index);
                   if (index > 0)
                   {
-                    index = stackTraceLn.LastIndexOf(".", index);
-                    if (index > 0)
+                    int endIndex = stackTraceLn.IndexOf("[0x");
+                    if (endIndex < 0)
                     {
-                      methodName = stackTraceLn.Substring(index + 1).Trim();
-                      methodName = methodName.Replace(" (", "(");
-                      stackTraceLn = stackTraceLn.Substring(0, index);
+                      endIndex = stackTraceLn.Length;
                     }
-                  }
-                  // Class name
-                  index = stackTraceLn.IndexOf("at ");
-                  if (index >= 0)
-                  {
-                    className = stackTraceLn.Substring(index + 3);
+                    methodName = stackTraceLn.Substring(index + 1, endIndex - index - 1).Trim();
+                    methodName = methodName.Replace(" (", "(");
+                    stackTraceLn = stackTraceLn.Substring(0, index);
                   }
                 }
-                else
+                // Class name
+                index = stackTraceLn.IndexOf("at ");
+                if (index >= 0)
                 {
-                  fileName = stackTraceLn;
+                  className = stackTraceLn.Substring(index + 3);
                 }
               }
               else
               {
-                index = stackTraceLn.IndexOf("at ");
-                if (index >= 0)
-                {
-                  index += 3;
-                }
-                else
-                {
-                  index = 0;
-                }
-                fileName = stackTraceLn.Substring(index);
+                fileName = stackTraceLn;
               }
             }
             else
             {
-              fileName = stackTraceLn;
+              index = stackTraceLn.IndexOf("at ");
+              if (index >= 0)
+              {
+                index += 3;
+              }
+              else
+              {
+                index = 0;
+              }
+              fileName = stackTraceLn.Substring(index);
             }
-            RaygunErrorStackTraceLineMessage line = new RaygunErrorStackTraceLineMessage();
-            line.FileName = fileName;
-            line.LineNumber = lineNumber;
-            line.MethodName = methodName;
-            line.ClassName = className;
-
-            lines.Add(line);
           }
+          else
+          {
+            fileName = stackTraceLn;
+          }
+          var line = new RaygunErrorStackTraceLineMessage
+          {
+            FileName = fileName,
+            LineNumber = lineNumber,
+            MethodName = methodName,
+            ClassName = className
+          };
+
+          lines.Add(line);
         }
         if (lines.Count > 0)
         {

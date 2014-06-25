@@ -41,9 +41,9 @@ namespace Mindscape.Raygun4Unity
       return this;
     }
 
-    public IRaygunMessageBuilder SetExceptionDetails(string message, string stackTrace, string type)
+    public IRaygunMessageBuilder SetExceptionDetails(string message, string stackTrace)
     {
-      _raygunMessage.Details.Error = new RaygunErrorMessage(message, stackTrace, type);
+      _raygunMessage.Details.Error = new RaygunErrorMessage(message, stackTrace);
       return this;
     }
 

@@ -83,7 +83,7 @@ namespace Mindscape.Raygun4Unity
     {
       if (type == LogType.Exception || type == LogType.Error)
       {
-        RaygunMessage raygunMessage = _current.BuildMessage(message, stackTrace, type.ToString(), null, null);
+        RaygunMessage raygunMessage = _current.BuildMessage(message, stackTrace, null, null);
         _current.Send(raygunMessage);
       }
     }
@@ -108,7 +108,7 @@ namespace Mindscape.Raygun4Unity
     /// <param name="userCustomData">A key-value collection of custom data that will be added to the payload.</param>
     public void Send(string message, string stackTrace, IList<string> tags, IDictionary userCustomData)
     {
-      Send(BuildMessage(message, stackTrace, null, tags, userCustomData));
+      Send(BuildMessage(message, stackTrace, tags, userCustomData));
     }
 
     /// <summary>
@@ -132,14 +132,14 @@ namespace Mindscape.Raygun4Unity
       Send(BuildMessage(exception, tags, userCustomData));
     }
 
-    internal RaygunMessage BuildMessage(string message, string stackTrace, string type, IList<string> tags, IDictionary userCustomData)
+    internal RaygunMessage BuildMessage(string message, string stackTrace, IList<string> tags, IDictionary userCustomData)
     {
       //exception = StripWrapperExceptions(exception)
 
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
         .SetMachineName(Environment.MachineName)
-        .SetExceptionDetails(message, stackTrace, type)
+        .SetExceptionDetails(message, stackTrace)
         .SetClientDetails()
         .SetVersion(ApplicationVersion)
         .SetTags(tags)
