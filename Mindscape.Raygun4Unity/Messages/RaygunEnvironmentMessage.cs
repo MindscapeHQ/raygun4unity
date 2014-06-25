@@ -38,7 +38,7 @@ namespace Mindscape.Raygun4Unity.Messages
         GetWindowRect(hWnd, out rect);
         WindowBoundsWidth = rect.Right - rect.Left;
         WindowBoundsHeight = rect.Bottom - rect.Top;
-
+        
         ProcessorCount = Environment.ProcessorCount;
         Architecture = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
         OSVersion = Environment.OSVersion.VersionString;
@@ -109,57 +109,12 @@ namespace Mindscape.Raygun4Unity.Messages
       }
     }
 
-    public string ResolutionScale
-    {
-      get { return _resolutionScale; }
-      private set
-      {
-        _resolutionScale = value;
-      }
-    }
-
     public string Architecture
     {
       get {return _architecture; }
       private set
       {
         _architecture = value;
-      }
-    }
-
-    public ulong TotalVirtualMemory
-    {
-      get { return _totalVirtualMemory; }
-      private set
-      {
-        _totalVirtualMemory = value;
-      }
-    }
-
-    public ulong AvailableVirtualMemory
-    {
-      get { return _availableVirtualMemory; }
-      private set
-      {
-        _availableVirtualMemory = value;
-      }
-    }
-
-    public ulong TotalPhysicalMemory
-    {
-      get { return _totalPhysicalMemory; }
-      private set
-      {
-        _totalPhysicalMemory = value;
-      }
-    }
-
-    public ulong AvailablePhysicalMemory
-    {
-      get { return _availablePhysicalMemory;}
-      private set
-      {
-        _availablePhysicalMemory = value;
       }
     }
 

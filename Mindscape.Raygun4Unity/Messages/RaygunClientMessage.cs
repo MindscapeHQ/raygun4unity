@@ -13,9 +13,9 @@ namespace Mindscape.Raygun4Unity.Messages
 
     public RaygunClientMessage()
     {
-      Name = "Raygun4Net.Unity";
+      Name = "Raygun4Unity";
       Version = Assembly.GetAssembly(typeof(RaygunClient)).GetName().Version.ToString();
-      ClientUrl = @"https://github.com/MindscapeHQ/raygun4net";
+      ClientUrl = @"https://github.com/MindscapeHQ/raygun4unity";
     }
 
     public string Name
