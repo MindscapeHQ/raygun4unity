@@ -56,7 +56,6 @@ namespace Mindscape.Raygun4Unity.Messages
 
     private IntPtr GetActiveWindow()
     {
-      IntPtr handle = IntPtr.Zero;
       return GetForegroundWindow();
     }
 
