@@ -173,7 +173,7 @@ namespace Mindscape.Raygun4Unity
 
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
-        .SetMachineName(Environment.MachineName)
+        .SetMachineName(SystemInfo.deviceName)
         .SetExceptionDetails(exception)
         .SetClientDetails()
         .SetVersion(ApplicationVersion)

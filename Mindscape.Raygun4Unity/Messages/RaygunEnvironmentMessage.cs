@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using UnityEngine;
 
 namespace Mindscape.Raygun4Unity.Messages
 {
@@ -23,53 +24,27 @@ namespace Mindscape.Raygun4Unity.Messages
 
     public RaygunEnvironmentMessage()
     {
-      // Different environments can fail to load the environment details.
-      // For now if they fail to load for whatever reason then just
-      // swallow the exception. A good addition would be to handle
-      // these cases and load them correctly depending on where its running.
-      // see http://raygun.io/forums/thread/3655
       try
       {
         DateTime now = DateTime.Now;
         UtcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(now).TotalHours;
 
-        IntPtr hWnd = GetActiveWindow();
-        RECT rect;
-        GetWindowRect(hWnd, out rect);
-        WindowBoundsWidth = rect.Right - rect.Left;
-        WindowBoundsHeight = rect.Bottom - rect.Top;
+        WindowBoundsWidth = Screen.width;
+        WindowBoundsHeight = Screen.height;
         
-        ProcessorCount = Environment.ProcessorCount;
-        Architecture = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
-        OSVersion = Environment.OSVersion.VersionString;
-
+        ProcessorCount = SystemInfo.processorCount;
+        Cpu = SystemInfo.processorType;
+        OSVersion = SystemInfo.operatingSystem;
+        DeviceModel = SystemInfo.deviceModel;
+        DeviceType = SystemInfo.deviceType.ToString();
+        SystemMemorySize = SystemInfo.systemMemorySize;
+        
         Locale = CultureInfo.CurrentCulture.DisplayName;
       }
       catch (Exception ex)
       {
         System.Diagnostics.Debug.WriteLine(string.Format("Error getting environment info: {0}", ex.Message));
       }
-    }
-
-    [DllImport("user32.dll")]
-    static extern IntPtr GetForegroundWindow();
-
-    private IntPtr GetActiveWindow()
-    {
-      return GetForegroundWindow();
-    }
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct RECT
-    {
-      public int Left;        // x position of upper-left corner  
-      public int Top;         // y position of upper-left corner  
-      public int Right;       // x position of lower-right corner  
-      public int Bottom;      // y position of lower-right corner  
     }
 
     public int ProcessorCount
@@ -108,6 +83,8 @@ namespace Mindscape.Raygun4Unity.Messages
       }
     }
 
+    public string Cpu { get; set; }
+
     public string Architecture
     {
       get {return _architecture; }
@@ -116,6 +93,12 @@ namespace Mindscape.Raygun4Unity.Messages
         _architecture = value;
       }
     }
+
+    public string DeviceModel { get; set; }
+
+    public string DeviceType { get; set; }
+
+    public int SystemMemorySize { get; set; }
 
     public double UtcOffset
     {
