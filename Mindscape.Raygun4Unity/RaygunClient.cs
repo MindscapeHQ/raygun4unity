@@ -16,6 +16,7 @@ namespace Mindscape.Raygun4Unity
 
     private string _user;
     private string _applicationVersion;
+    private RaygunIdentifierMessage _userInfo;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RaygunClient" /> class.
@@ -46,6 +47,15 @@ namespace Mindscape.Raygun4Unity
       {
         _user = value;
       }
+    }
+
+    /// <summary>
+    /// Gets or sets information about the user including the identity string.
+    /// </summary>
+    public RaygunIdentifierMessage UserInfo
+    {
+      get { return _userInfo; }
+      set { _userInfo = value; }
     }
 
     /// <summary>
@@ -152,7 +162,7 @@ namespace Mindscape.Raygun4Unity
         .SetVersion(ApplicationVersion)
         .SetTags(tags)
         .SetUserCustomData(userCustomData)
-        .SetUser(User)
+        .SetUser(UserInfo ?? (!String.IsNullOrEmpty(User) ? new RaygunIdentifierMessage(User) : null))
         .Build();
       return raygunMessage;
     }
