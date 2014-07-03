@@ -237,7 +237,7 @@ namespace Mindscape.Raygun4Unity.Messages
 
 
 
-      StackTrace stackTrace = new StackTrace(exception, true);
+      /*StackTrace stackTrace = new StackTrace(exception, true);
       StackFrame[] frames = stackTrace.GetFrames();
 
       if (frames == null || frames.Length == 0)
@@ -279,12 +279,12 @@ namespace Mindscape.Raygun4Unity.Messages
 
           lines.Add(line);
         }
-      }
+      }*/
 
       return lines.ToArray();
     }
 
-    private string GenerateMethodName(MethodBase method)
+    /*private string GenerateMethodName(MethodBase method)
     {
       StringBuilder stringBuilder = new StringBuilder();
 
@@ -323,7 +323,7 @@ namespace Mindscape.Raygun4Unity.Messages
       stringBuilder.Append(")");
 
       return stringBuilder.ToString();
-    }
+    }*/
 
     public RaygunErrorMessage InnerError
     {

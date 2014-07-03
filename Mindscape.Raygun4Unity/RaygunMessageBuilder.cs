@@ -85,15 +85,7 @@ namespace Mindscape.Raygun4Unity
       }
       else
       {
-        Assembly entryAssembly = Assembly.GetEntryAssembly();
-        if (entryAssembly != null)
-        {
-          _raygunMessage.Details.Version = entryAssembly.GetName().Version.ToString();
-        }
-        else
-        {
-          _raygunMessage.Details.Version = "Not supplied";
-        }
+        _raygunMessage.Details.Version = "Not supplied";
       }
       return this;
     }

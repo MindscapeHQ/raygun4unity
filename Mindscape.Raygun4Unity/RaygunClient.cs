@@ -215,7 +215,7 @@ namespace Mindscape.Raygun4Unity
     {
       try
       {
-        byte[] data = Encoding.ASCII.GetBytes(message);
+        byte[] data = StringToAscii(message);
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers["X-ApiKey"] = _apiKey;
         new WWW(RaygunSettings.Settings.ApiEndpoint.AbsoluteUri, data, headers);
@@ -224,6 +224,17 @@ namespace Mindscape.Raygun4Unity
       {
         System.Diagnostics.Debug.WriteLine(string.Format("Error Logging Exception to Raygun.io {0}", e.Message)); 
       }
+    }
+
+    private static byte[] StringToAscii(string s)
+    {
+      byte[] retval = new byte[s.Length];
+      for (int i = 0; i < s.Length; i++)
+      {
+        char ch = s[i];
+        retval[i] = ch <= 0x7f ? (byte)ch : (byte)'?';
+      }
+      return retval;
     }
   }
 }
