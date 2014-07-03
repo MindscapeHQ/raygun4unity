@@ -156,7 +156,7 @@ namespace Mindscape.Raygun4Unity
 
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
-        .SetMachineName(Environment.MachineName)
+        .SetMachineName(SystemInfo.deviceName)
         .SetExceptionDetails(message, stackTrace)
         .SetClientDetails()
         .SetVersion(ApplicationVersion)
@@ -216,9 +216,9 @@ namespace Mindscape.Raygun4Unity
       try
       {
         byte[] data = Encoding.ASCII.GetBytes(message);
-        Hashtable table = new Hashtable();
-        table.Add("X-ApiKey", _apiKey);
-        new WWW(RaygunSettings.Settings.ApiEndpoint.AbsoluteUri, data, table);
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers["X-ApiKey"] = _apiKey;
+        new WWW(RaygunSettings.Settings.ApiEndpoint.AbsoluteUri, data, headers);
       }
       catch (Exception e)
       {

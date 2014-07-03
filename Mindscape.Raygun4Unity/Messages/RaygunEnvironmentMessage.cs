@@ -98,7 +98,7 @@ namespace Mindscape.Raygun4Unity.Messages
 
     public string DeviceType { get; set; }
 
-    public int SystemMemorySize { get; set; }
+    public int SystemMemorySize { get; set; } // MB
 
     public double UtcOffset
     {
