@@ -14,10 +14,6 @@ namespace Mindscape.Raygun4Unity
 
     private readonly string _apiKey;
 
-    private string _user;
-    private string _applicationVersion;
-    private RaygunIdentifierMessage _userInfo;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="RaygunClient" /> class.
     /// </summary>
@@ -40,35 +36,17 @@ namespace Mindscape.Raygun4Unity
     /// <summary>
     /// Gets or sets the user identity string.
     /// </summary>
-    public string User
-    {
-      get { return _user; }
-      set
-      {
-        _user = value;
-      }
-    }
+    public string User { get; set; }
 
     /// <summary>
     /// Gets or sets information about the user including the identity string.
     /// </summary>
-    public RaygunIdentifierMessage UserInfo
-    {
-      get { return _userInfo; }
-      set { _userInfo = value; }
-    }
+    public RaygunIdentifierMessage UserInfo { get; set; }
 
     /// <summary>
     /// Gets or sets a custom application version identifier for all error messages sent to the Raygun.io endpoint.
     /// </summary>
-    public string ApplicationVersion
-    {
-      get { return _applicationVersion; }
-      set
-      {
-        _applicationVersion = value;
-      }
-    }
+    public string ApplicationVersion { get; set; }
 
     /// <summary>
     /// Causes Raygun to listen to and send all unhandled exceptions.

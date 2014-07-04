@@ -9,8 +9,6 @@ namespace Mindscape.Raygun4Unity
     private static RaygunSettings _settings;
     private const string DefaultApiEndPoint = "https://api.raygun.io/entries";
 
-    private Uri _apiEndPoint;
-
     public static RaygunSettings Settings
     {
       get
@@ -24,13 +22,6 @@ namespace Mindscape.Raygun4Unity
       }
     }
 
-    public Uri ApiEndpoint
-    {
-      get { return _apiEndPoint; }
-      set
-      {
-        _apiEndPoint = value;
-      }
-    }
+    public Uri ApiEndpoint { get; set; }
   }
 }

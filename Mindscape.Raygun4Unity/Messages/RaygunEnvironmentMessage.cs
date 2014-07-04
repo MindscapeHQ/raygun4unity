@@ -9,16 +9,6 @@ namespace Mindscape.Raygun4Unity.Messages
 {
   public class RaygunEnvironmentMessage
   {
-    private int _processorCount;
-    private string _osVersion;
-    private string _resolutionScale;
-    private ulong _totalVirtualMemory;
-    private ulong _availableVirtualMemory;
-    private ulong _totalPhysicalMemory;
-    private ulong _availablePhysicalMemory;
-    private double _utcOffset;
-    private string _locale;
-
     public RaygunEnvironmentMessage()
     {
       try
@@ -71,23 +61,9 @@ namespace Mindscape.Raygun4Unity.Messages
       }
     }
 
-    public int ProcessorCount
-    {
-      get {return _processorCount; }
-      private set
-      {
-        _processorCount = value;
-      }
-    }
+    public int ProcessorCount { get; set; }
 
-    public string OSVersion
-    {
-      get {return _osVersion; }
-      private set
-      {
-        _osVersion = value;
-      }
-    }
+    public string OSVersion { get; set; }
 
     public int ResolutionWidth { get; set; }
 
@@ -153,22 +129,8 @@ namespace Mindscape.Raygun4Unity.Messages
 
     public bool SupportsVibration { get; set; }
 
-    public double UtcOffset
-    {
-      get { return _utcOffset; }
-      private set
-      {
-        _utcOffset = value;
-      }
-    }
+    public double UtcOffset { get; set; }
 
-    public string Locale
-    {
-      get { return _locale; }
-      private set
-      {
-        _locale = value;
-      }
-    }
+    public string Locale { get; set; }
   }
 }

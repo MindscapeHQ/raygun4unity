@@ -9,12 +9,6 @@ namespace Mindscape.Raygun4Unity.Messages
 {
   public class RaygunErrorMessage
   {
-    private RaygunErrorMessage _innerError;
-    private IDictionary _data;
-    private string _className;
-    private string _message;
-    private RaygunErrorStackTraceLineMessage[] _stackTrace;
-
     public RaygunErrorMessage()
     {
     }
@@ -325,49 +319,14 @@ namespace Mindscape.Raygun4Unity.Messages
       return stringBuilder.ToString();
     }*/
 
-    public RaygunErrorMessage InnerError
-    {
-      get { return _innerError; }
-      set
-      {
-        _innerError = value;
-      }
-    }
+    public RaygunErrorMessage InnerError { get; set; }
 
-    public IDictionary Data
-    {
-      get { return _data; }
-      set
-      {
-        _data = value;
-      }
-    }
+    public IDictionary Data { get; set; }
 
-    public string ClassName
-    {
-      get { return _className; }
-      set
-      {
-        _className = value;
-      }
-    }
+    public string ClassName { get; set; }
 
-    public string Message
-    {
-      get { return _message; }
-      set
-      {
-        _message = value;
-      }
-    }
+    public string Message { get; set; }
 
-    public RaygunErrorStackTraceLineMessage[] StackTrace
-    {
-      get { return _stackTrace; }
-      set
-      {
-        _stackTrace = value;
-      }
-    }
+    public RaygunErrorStackTraceLineMessage[] StackTrace { get; set; }
   }
 }
