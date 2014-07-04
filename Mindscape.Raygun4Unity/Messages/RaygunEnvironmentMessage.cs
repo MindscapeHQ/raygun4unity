@@ -57,7 +57,7 @@ namespace Mindscape.Raygun4Unity.Messages
       }
       catch (Exception ex)
       {
-        System.Diagnostics.Debug.WriteLine(string.Format("Error getting environment info: {0}", ex.Message));
+        RaygunClient.Log(string.Format("Error getting environment info: {0}", ex.Message));
       }
     }
 

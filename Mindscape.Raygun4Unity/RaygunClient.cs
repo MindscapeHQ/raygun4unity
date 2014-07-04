@@ -27,7 +27,7 @@ namespace Mindscape.Raygun4Unity
     {
       if (string.IsNullOrEmpty(_apiKey))
       {
-        System.Diagnostics.Debug.WriteLine("ApiKey has not been provided, exception will not be logged");
+        RaygunClient.Log("ApiKey has not been provided, exception will not be logged");
         return false;
       }
       return true;
@@ -179,7 +179,7 @@ namespace Mindscape.Raygun4Unity
         }
         catch (Exception ex)
         {
-          System.Diagnostics.Debug.WriteLine(string.Format("Error serializing raygun message: {0}", ex.Message));
+          RaygunClient.Log(string.Format("Error serializing raygun message: {0}", ex.Message));
         }
 
         if (message != null)
@@ -200,7 +200,7 @@ namespace Mindscape.Raygun4Unity
       }
       catch (Exception e)
       {
-        System.Diagnostics.Debug.WriteLine(string.Format("Error Logging Exception to Raygun.io {0}", e.Message)); 
+        RaygunClient.Log(string.Format("Error Logging Exception to Raygun.io {0}", e.Message)); 
       }
     }
 
@@ -213,6 +213,11 @@ namespace Mindscape.Raygun4Unity
         retval[i] = ch <= 0x7f ? (byte)ch : (byte)'?';
       }
       return retval;
+    }
+
+    internal static void Log(string message)
+    {
+      Debug.Log("<color=#B90000>Raygun4Unity: </color>" + message);
     }
   }
 }
