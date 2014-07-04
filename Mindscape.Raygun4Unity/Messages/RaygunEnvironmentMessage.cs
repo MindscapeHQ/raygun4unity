@@ -11,10 +11,7 @@ namespace Mindscape.Raygun4Unity.Messages
   {
     private int _processorCount;
     private string _osVersion;
-    private double _windowBoundsWidth;
-    private double _windowBoundsHeight;
     private string _resolutionScale;
-    private string _architecture;
     private ulong _totalVirtualMemory;
     private ulong _availableVirtualMemory;
     private ulong _totalPhysicalMemory;
@@ -29,9 +26,15 @@ namespace Mindscape.Raygun4Unity.Messages
         DateTime now = DateTime.Now;
         UtcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(now).TotalHours;
 
-        WindowBoundsWidth = Screen.width;
-        WindowBoundsHeight = Screen.height;
-        
+        Locale = CultureInfo.CurrentCulture.DisplayName;
+
+        ResolutionWidth = Screen.currentResolution.width;
+        ResolutionHeight = Screen.currentResolution.height;
+        RefreshRate = Screen.currentResolution.refreshRate;
+        ShowCursor = Screen.showCursor;
+        FullScreen = Screen.fullScreen;
+        Orientation = Screen.orientation.ToString();
+
         ProcessorCount = SystemInfo.processorCount;
         Cpu = SystemInfo.processorType;
         OSVersion = SystemInfo.operatingSystem;
@@ -39,7 +42,28 @@ namespace Mindscape.Raygun4Unity.Messages
         DeviceType = SystemInfo.deviceType.ToString();
         SystemMemorySize = SystemInfo.systemMemorySize;
         
-        Locale = CultureInfo.CurrentCulture.DisplayName;
+        GraphicsDeviceName = SystemInfo.graphicsDeviceName;
+        GraphicsDeviceVendor = SystemInfo.graphicsDeviceVendor;
+        GraphicsDeviceVersion = SystemInfo.graphicsDeviceVersion;
+        GraphicsMemorySize = SystemInfo.graphicsMemorySize;
+        GraphicsShaderLevel = SystemInfo.graphicsShaderLevel;
+        MaxTextureSize = SystemInfo.maxTextureSize;
+        NpotSupport = SystemInfo.npotSupport.ToString();
+        SupportedRenderTargetCount = SystemInfo.supportedRenderTargetCount;
+        Supports3DTextures = SystemInfo.supports3DTextures;
+        SupportsAccelerometer = SystemInfo.supportsAccelerometer;
+        SupportsComputeShaders = SystemInfo.supportsComputeShaders;
+        SupportsImageEffects = SystemInfo.supportsImageEffects;
+        SupportsGyroscope = SystemInfo.supportsGyroscope;
+        SupportsInstancing = SystemInfo.supportsInstancing;
+        SupportsLocationService = SystemInfo.supportsLocationService;
+        SupportsRenderTextures = SystemInfo.supportsRenderTextures;
+        SupportsRenderToCubemap = SystemInfo.supportsRenderToCubemap;
+        SupportsShadows = SystemInfo.supportsShadows;
+        SupportsSparseTextures = SystemInfo.supportsSparseTextures;
+        SupportsStencil = SystemInfo.supportsStencil;
+        SupportsVertexPrograms = SystemInfo.supportsVertexPrograms;
+        SupportsVibration = SystemInfo.supportsVibration;
       }
       catch (Exception ex)
       {
@@ -65,40 +89,69 @@ namespace Mindscape.Raygun4Unity.Messages
       }
     }
 
-    public double WindowBoundsWidth
-    {
-      get { return _windowBoundsWidth; }
-      private set
-      {
-        _windowBoundsWidth = value;
-      }
-    }
+    public int ResolutionWidth { get; set; }
 
-    public double WindowBoundsHeight
-    {
-      get { return _windowBoundsHeight; }
-      private set
-      {
-        _windowBoundsHeight = value;
-      }
-    }
+    public int ResolutionHeight { get; set; }
+
+    public int RefreshRate { get; set; }
+
+    public bool ShowCursor { get; set; }
 
     public string Cpu { get; set; }
 
-    public string Architecture
-    {
-      get {return _architecture; }
-      private set
-      {
-        _architecture = value;
-      }
-    }
+    public string Orientation { get; set; }
+
+    public bool FullScreen { get; set; }
 
     public string DeviceModel { get; set; }
 
     public string DeviceType { get; set; }
 
     public int SystemMemorySize { get; set; } // MB
+
+    public string GraphicsDeviceName { get; set; }
+
+    public string GraphicsDeviceVendor { get; set; }
+
+    public string GraphicsDeviceVersion { get; set; }
+
+    public int GraphicsMemorySize { get; set; }
+
+    public int GraphicsShaderLevel { get; set; }
+
+    public int MaxTextureSize { get; set; }
+
+    public string NpotSupport { get; set; }
+
+    public int SupportedRenderTargetCount { get; set; }
+
+    public bool Supports3DTextures { get; set; }
+
+    public bool SupportsAccelerometer { get; set; }
+
+    public bool SupportsComputeShaders { get; set; }
+
+    public bool SupportsGyroscope { get; set; }
+
+    public bool SupportsImageEffects { get; set; }
+
+    public bool SupportsInstancing { get; set; }
+
+    public bool SupportsLocationService { get; set; }
+
+    public bool SupportsRenderTextures { get; set; }
+
+    public bool SupportsRenderToCubemap { get; set; }
+
+    public bool SupportsShadows { get; set; }
+
+    public bool SupportsSparseTextures { get; set; }
+
+    public int SupportsStencil { get; set; }
+
+    public bool SupportsVertexPrograms { get; set; }
+
+    public bool SupportsVibration { get; set; }
 
     public double UtcOffset
     {
