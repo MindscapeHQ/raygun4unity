@@ -13,9 +13,8 @@ namespace Mindscape.Raygun4Unity.Messages
     {
       try
       {
-        DateTime now = DateTime.Now;
-        UtcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(now).TotalHours;
-
+        UtcOffset = -Math.Round((DateTime.UtcNow - DateTime.Now).TotalHours + 0.01, 1);
+        
         Locale = Application.systemLanguage.ToString();
 
         ResolutionWidth = Screen.currentResolution.width;
