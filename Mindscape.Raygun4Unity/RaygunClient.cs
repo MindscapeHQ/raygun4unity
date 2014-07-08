@@ -33,6 +33,20 @@ namespace Mindscape.Raygun4Unity
       return true;
     }
 
+    // Returns true if the message can be sent, false if the sending is canceled.
+    protected bool OnSendingMessage(RaygunMessage raygunMessage)
+    {
+      bool result = true;
+      EventHandler<RaygunSendingMessageEventArgs> handler = SendingMessage;
+      if (handler != null)
+      {
+        RaygunSendingMessageEventArgs args = new RaygunSendingMessageEventArgs(raygunMessage);
+        handler(this, args);
+        result = !args.Cancel;
+      }
+      return result;
+    }
+
     /// <summary>
     /// Gets or sets the user identity string.
     /// </summary>
@@ -47,6 +61,11 @@ namespace Mindscape.Raygun4Unity
     /// Gets or sets a custom application version identifier for all error messages sent to the Raygun.io endpoint.
     /// </summary>
     public string ApplicationVersion { get; set; }
+
+    /// <summary>
+    /// Raised just before a message is sent. This can be used to make final adjustments to the <see cref="RaygunMessage"/>, or to cancel the send.
+    /// </summary>
+    public event EventHandler<RaygunSendingMessageEventArgs> SendingMessage;
 
     /// <summary>
     /// Causes Raygun to listen to and send all unhandled exceptions.
@@ -171,20 +190,24 @@ namespace Mindscape.Raygun4Unity
     {
       if (ValidateApiKey())
       {
-        string message = null;
+        bool canSend = OnSendingMessage(raygunMessage);
+        if (canSend)
+        {
+          string message = null;
 
-        try
-        {
-          message = SimpleJson.SerializeObject(raygunMessage);
-        }
-        catch (Exception ex)
-        {
-          RaygunClient.Log(string.Format("Error serializing raygun message: {0}", ex.Message));
-        }
+          try
+          {
+            message = SimpleJson.SerializeObject(raygunMessage);
+          }
+          catch (Exception ex)
+          {
+            RaygunClient.Log(string.Format("Error serializing raygun message: {0}", ex.Message));
+          }
 
-        if (message != null)
-        {
-          SendMessage(message);
+          if (message != null)
+          {
+            SendMessage(message);
+          }
         }
       }
     }
