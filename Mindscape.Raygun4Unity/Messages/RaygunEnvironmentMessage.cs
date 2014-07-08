@@ -16,7 +16,7 @@ namespace Mindscape.Raygun4Unity.Messages
         DateTime now = DateTime.Now;
         UtcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(now).TotalHours;
 
-        Locale = CultureInfo.CurrentCulture.DisplayName;
+        Locale = Application.systemLanguage.ToString();
 
         ResolutionWidth = Screen.currentResolution.width;
         ResolutionHeight = Screen.currentResolution.height;
@@ -31,7 +31,8 @@ namespace Mindscape.Raygun4Unity.Messages
         DeviceModel = SystemInfo.deviceModel;
         DeviceType = SystemInfo.deviceType.ToString();
         SystemMemorySize = SystemInfo.systemMemorySize;
-        
+        Platform = Application.platform.ToString();
+
         GraphicsDeviceName = SystemInfo.graphicsDeviceName;
         GraphicsDeviceVendor = SystemInfo.graphicsDeviceVendor;
         GraphicsDeviceVersion = SystemInfo.graphicsDeviceVersion;
@@ -84,6 +85,8 @@ namespace Mindscape.Raygun4Unity.Messages
     public string DeviceType { get; set; }
 
     public int SystemMemorySize { get; set; } // MB
+
+    public string Platform { get; set; }
 
     public string GraphicsDeviceName { get; set; }
 
