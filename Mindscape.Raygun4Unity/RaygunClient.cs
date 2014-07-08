@@ -14,10 +14,6 @@ namespace Mindscape.Raygun4Unity
 
     private readonly string _apiKey;
 
-    private string _user;
-    private string _applicationVersion;
-    private RaygunIdentifierMessage _userInfo;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="RaygunClient" /> class.
     /// </summary>
@@ -31,7 +27,7 @@ namespace Mindscape.Raygun4Unity
     {
       if (string.IsNullOrEmpty(_apiKey))
       {
-        System.Diagnostics.Debug.WriteLine("ApiKey has not been provided, exception will not be logged");
+        RaygunClient.Log("ApiKey has not been provided, exception will not be logged");
         return false;
       }
       return true;
@@ -40,35 +36,17 @@ namespace Mindscape.Raygun4Unity
     /// <summary>
     /// Gets or sets the user identity string.
     /// </summary>
-    public string User
-    {
-      get { return _user; }
-      set
-      {
-        _user = value;
-      }
-    }
+    public string User { get; set; }
 
     /// <summary>
     /// Gets or sets information about the user including the identity string.
     /// </summary>
-    public RaygunIdentifierMessage UserInfo
-    {
-      get { return _userInfo; }
-      set { _userInfo = value; }
-    }
+    public RaygunIdentifierMessage UserInfo { get; set; }
 
     /// <summary>
     /// Gets or sets a custom application version identifier for all error messages sent to the Raygun.io endpoint.
     /// </summary>
-    public string ApplicationVersion
-    {
-      get { return _applicationVersion; }
-      set
-      {
-        _applicationVersion = value;
-      }
-    }
+    public string ApplicationVersion { get; set; }
 
     /// <summary>
     /// Causes Raygun to listen to and send all unhandled exceptions.
@@ -156,7 +134,7 @@ namespace Mindscape.Raygun4Unity
 
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
-        .SetMachineName(Environment.MachineName)
+        .SetMachineName(SystemInfo.deviceName)
         .SetExceptionDetails(message, stackTrace)
         .SetClientDetails()
         .SetVersion(ApplicationVersion)
@@ -173,13 +151,13 @@ namespace Mindscape.Raygun4Unity
 
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
-        .SetMachineName(Environment.MachineName)
+        .SetMachineName(SystemInfo.deviceName)
         .SetExceptionDetails(exception)
         .SetClientDetails()
         .SetVersion(ApplicationVersion)
         .SetTags(tags)
         .SetUserCustomData(userCustomData)
-        .SetUser(User)
+        .SetUser(UserInfo ?? (!String.IsNullOrEmpty(User) ? new RaygunIdentifierMessage(User) : null))
         .Build();
       return raygunMessage;
     }
@@ -201,7 +179,7 @@ namespace Mindscape.Raygun4Unity
         }
         catch (Exception ex)
         {
-          System.Diagnostics.Debug.WriteLine(string.Format("Error serializing raygun message: {0}", ex.Message));
+          RaygunClient.Log(string.Format("Error serializing raygun message: {0}", ex.Message));
         }
 
         if (message != null)
@@ -215,15 +193,31 @@ namespace Mindscape.Raygun4Unity
     {
       try
       {
-        byte[] data = Encoding.ASCII.GetBytes(message);
-        Hashtable table = new Hashtable();
-        table.Add("X-ApiKey", _apiKey);
-        new WWW(RaygunSettings.Settings.ApiEndpoint.AbsoluteUri, data, table);
+        byte[] data = StringToAscii(message);
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers["X-ApiKey"] = _apiKey;
+        new WWW(RaygunSettings.Settings.ApiEndpoint.AbsoluteUri, data, headers);
       }
       catch (Exception e)
       {
-        System.Diagnostics.Debug.WriteLine(string.Format("Error Logging Exception to Raygun.io {0}", e.Message)); 
+        RaygunClient.Log(string.Format("Error Logging Exception to Raygun.io {0}", e.Message)); 
       }
+    }
+
+    private static byte[] StringToAscii(string s)
+    {
+      byte[] retval = new byte[s.Length];
+      for (int i = 0; i < s.Length; i++)
+      {
+        char ch = s[i];
+        retval[i] = ch <= 0x7f ? (byte)ch : (byte)'?';
+      }
+      return retval;
+    }
+
+    internal static void Log(string message)
+    {
+      Debug.Log("<color=#B90000>Raygun4Unity: </color>" + message);
     }
   }
 }

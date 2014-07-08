@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
@@ -9,12 +8,6 @@ namespace Mindscape.Raygun4Unity.Messages
 {
   public class RaygunErrorMessage
   {
-    private RaygunErrorMessage _innerError;
-    private IDictionary _data;
-    private string _className;
-    private string _message;
-    private RaygunErrorStackTraceLineMessage[] _stackTrace;
-
     public RaygunErrorMessage()
     {
     }
@@ -237,7 +230,7 @@ namespace Mindscape.Raygun4Unity.Messages
 
 
 
-      StackTrace stackTrace = new StackTrace(exception, true);
+      /*StackTrace stackTrace = new StackTrace(exception, true);
       StackFrame[] frames = stackTrace.GetFrames();
 
       if (frames == null || frames.Length == 0)
@@ -279,12 +272,12 @@ namespace Mindscape.Raygun4Unity.Messages
 
           lines.Add(line);
         }
-      }
+      }*/
 
       return lines.ToArray();
     }
 
-    private string GenerateMethodName(MethodBase method)
+    /*private string GenerateMethodName(MethodBase method)
     {
       StringBuilder stringBuilder = new StringBuilder();
 
@@ -323,51 +316,16 @@ namespace Mindscape.Raygun4Unity.Messages
       stringBuilder.Append(")");
 
       return stringBuilder.ToString();
-    }
+    }*/
 
-    public RaygunErrorMessage InnerError
-    {
-      get { return _innerError; }
-      set
-      {
-        _innerError = value;
-      }
-    }
+    public RaygunErrorMessage InnerError { get; set; }
 
-    public IDictionary Data
-    {
-      get { return _data; }
-      set
-      {
-        _data = value;
-      }
-    }
+    public IDictionary Data { get; set; }
 
-    public string ClassName
-    {
-      get { return _className; }
-      set
-      {
-        _className = value;
-      }
-    }
+    public string ClassName { get; set; }
 
-    public string Message
-    {
-      get { return _message; }
-      set
-      {
-        _message = value;
-      }
-    }
+    public string Message { get; set; }
 
-    public RaygunErrorStackTraceLineMessage[] StackTrace
-    {
-      get { return _stackTrace; }
-      set
-      {
-        _stackTrace = value;
-      }
-    }
+    public RaygunErrorStackTraceLineMessage[] StackTrace { get; set; }
   }
 }
