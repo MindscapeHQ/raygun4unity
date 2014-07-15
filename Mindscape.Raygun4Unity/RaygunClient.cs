@@ -219,7 +219,7 @@ namespace Mindscape.Raygun4Unity
         byte[] data = StringToAscii(message);
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers["X-ApiKey"] = _apiKey;
-        new WWW(RaygunSettings.Settings.ApiEndpoint.AbsoluteUri, data, headers);
+        new WWW(new Uri("https://api.raygun.io/entries").AbsoluteUri, data, headers);
       }
       catch (Exception e)
       {
