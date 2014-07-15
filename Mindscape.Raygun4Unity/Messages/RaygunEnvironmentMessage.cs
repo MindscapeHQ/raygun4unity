@@ -24,6 +24,8 @@ namespace Mindscape.Raygun4Unity.Messages
         FullScreen = Screen.fullScreen;
         Orientation = Screen.orientation.ToString();
 
+        LoadedLevelName = Application.loadedLevelName;
+
         ProcessorCount = SystemInfo.processorCount;
         Cpu = SystemInfo.processorType;
         OSVersion = SystemInfo.operatingSystem;
@@ -61,10 +63,6 @@ namespace Mindscape.Raygun4Unity.Messages
       }
     }
 
-    public int ProcessorCount { get; set; }
-
-    public string OSVersion { get; set; }
-
     public int ResolutionWidth { get; set; }
 
     public int ResolutionHeight { get; set; }
@@ -73,11 +71,17 @@ namespace Mindscape.Raygun4Unity.Messages
 
     public bool ShowCursor { get; set; }
 
-    public string Cpu { get; set; }
+    public bool FullScreen { get; set; }
 
     public string Orientation { get; set; }
 
-    public bool FullScreen { get; set; }
+    public string LoadedLevelName { get; set; }
+
+    public int ProcessorCount { get; set; }
+
+    public string Cpu { get; set; }
+
+    public string OSVersion { get; set; }
 
     public string DeviceModel { get; set; }
 
