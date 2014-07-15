@@ -76,6 +76,15 @@ namespace Mindscape.Raygun4Unity
       Detach();
       _current = new RaygunClient(apiKey);
       Application.RegisterLogCallback(HandleException);
+      AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+    }
+
+    private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+      if (e.ExceptionObject is Exception)
+      {
+        _current.Send(e.ExceptionObject as Exception);
+      }
     }
 
     /// <summary>
@@ -84,6 +93,7 @@ namespace Mindscape.Raygun4Unity
     public static void Detach()
     {
       Application.RegisterLogCallback(null);
+      AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
     }
 
     private static void HandleException(string message, string stackTrace, LogType type)

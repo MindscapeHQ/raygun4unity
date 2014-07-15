@@ -25,6 +25,9 @@ You can setup Raygun4Unity to automatically send all unhandled exceptions with t
 RaygunClient.Attach("YOUR_APP_API_KEY");
 ```
 
+**WARNING** The RaygunClient uses Application.RegisterLogCallback to listen to exceptions. RegisterLogCallback can only have one handler at a time, so if you already are using RegisterLogCallback,
+then you'll want to send the exception information manually within your existing callback.
+
 ####Manually
 
 If you already have your own centralized logging system in place, then you many want to send messages to Raygun.io manually within your logging handlers.
@@ -51,7 +54,12 @@ If you are using the Attach method, you can get the RaygunClient instance from t
 
 To keep track of how many users are affected by each exception, you can set the User property of the RaygunClient instance. This can be any id string of your choosing to identify each user.
 Ideally, try to use an id that you can use to relate back to an actual user such as a database id, or an email address. If you use an email address, the users gravitars (if found) will displayed on the Raygun.io error dashboards.
+If you are using the Attach method, you can get the RaygunClient instance from the static RaygunClient.Current property.
 
 ####Tags and custom data
 
 The Send method overloads allow you to send an optional list of tags or a dictionary of object data. You can use these to provide whatever additional information you want to help you debug exceptions.
+
+####Message modifications before sending
+
+By listening to the RaygunClient.SendingMessage event, you can make modifications to any part of the message just before it is serialized and sent to Raygun.io.
