@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using UnityEngine;
 
 namespace Mindscape.Raygun4Unity.Messages
 {
@@ -14,9 +15,19 @@ namespace Mindscape.Raygun4Unity.Messages
 
     public RaygunErrorMessage(string message, string stackTrace)
     {
-      Message = message;
-
-      StackTrace = BuildStackTrace(stackTrace);
+      if ("WP8Player".Equals(Application.platform.ToString()))
+      {
+        ParseWindowsPhoneMessage(message);
+        if (!String.IsNullOrEmpty(stackTrace))
+        {
+          StackTrace = BuildStackTrace(stackTrace);
+        }
+      }
+      else
+      {
+        Message = message;
+        StackTrace = BuildStackTrace(stackTrace);
+      }
     }
 
     public RaygunErrorMessage(Exception exception)
@@ -32,6 +43,57 @@ namespace Mindscape.Raygun4Unity.Messages
       if (exception.InnerException != null)
       {
         InnerError = new RaygunErrorMessage(exception.InnerException);
+      }
+    }
+
+    private void ParseWindowsPhoneMessage(string message)
+    {
+      RawMessage = message;
+
+      if (!String.IsNullOrEmpty(message))
+      {
+        string exception = null;
+        string type = null;
+
+        int exceptionIndex = message.IndexOf("Exception: ");
+        if (exceptionIndex >= 0)
+        {
+          int endExceptionIndex = message.IndexOf('\n', exceptionIndex);
+          if (endExceptionIndex >= 0)
+          {
+            exception = message.Substring(exceptionIndex + 11, endExceptionIndex - exceptionIndex - 11);
+          }
+        }
+
+        int typeIndex = message.IndexOf("Type: ");
+        if (typeIndex >= 0)
+        {
+          int endTypeIndex = message.IndexOf('\n', typeIndex);
+          if (endTypeIndex >= 0)
+          {
+            type = message.Substring(typeIndex + 6, endTypeIndex - typeIndex - 6);
+          }
+        }
+
+        ClassName = type;
+        int index = type.LastIndexOf(".");
+        if (index >= 0)
+        {
+          string exceptionType = type.Substring(index + 1);
+          Message = exceptionType + ": " + exception;
+        }
+
+        if (String.IsNullOrEmpty(Message))
+        {
+          Message = message;
+        }
+
+        int stackIndex = message.IndexOf("   at ");
+        if (stackIndex >= 0)
+        {
+          string stackTrace = message.Substring(stackIndex);
+          StackTrace = BuildStackTrace(stackTrace);
+        }
       }
     }
 
@@ -92,7 +154,11 @@ namespace Mindscape.Raygun4Unity.Messages
                 stackTraceLn = stackTraceLn.Substring(0, index);
               }
               // Class name
-              className = stackTraceLn;
+              className = stackTraceLn.Trim();
+              if (className.StartsWith("at "))
+              {
+                className = className.Substring(3);
+              }
             }
             else
             {
@@ -239,6 +305,8 @@ namespace Mindscape.Raygun4Unity.Messages
     public string ClassName { get; set; }
 
     public string Message { get; set; }
+
+    public string RawMessage { get; set; }
 
     public RaygunErrorStackTraceLineMessage[] StackTrace { get; set; }
   }
