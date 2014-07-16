@@ -10,8 +10,6 @@ namespace Mindscape.Raygun4Unity
 {
   public class RaygunClient
   {
-    private static RaygunClient _current;
-
     private readonly string _apiKey;
 
     /// <summary>
@@ -66,42 +64,6 @@ namespace Mindscape.Raygun4Unity
     /// Raised just before a message is sent. This can be used to make final adjustments to the <see cref="RaygunMessage"/>, or to cancel the send.
     /// </summary>
     public event EventHandler<RaygunSendingMessageEventArgs> SendingMessage;
-
-    /// <summary>
-    /// Causes Raygun to listen to and send all unhandled exceptions.
-    /// </summary>
-    /// <param name="apiKey">Your app api key.</param>
-    public static void Attach(string apiKey)
-    {
-      Detach();
-      _current = new RaygunClient(apiKey);
-      Application.RegisterLogCallback(HandleException);
-    }
-
-    /// <summary>
-    /// Detaches Raygun from listening to unhandled exceptions.
-    /// </summary>
-    public static void Detach()
-    {
-      Application.RegisterLogCallback(null);
-    }
-
-    private static void HandleException(string message, string stackTrace, LogType type)
-    {
-      if (type == LogType.Exception || type == LogType.Error)
-      {
-        RaygunMessage raygunMessage = _current.BuildMessage(message, stackTrace, null, null);
-        _current.Send(raygunMessage);
-      }
-    }
-
-    /// <summary>
-    /// Gets the <see cref="RaygunClient"/> created by the Attach method.
-    /// </summary>
-    public static RaygunClient Current
-    {
-      get { return _current; }
-    }
 
     /// <summary>
     /// Transmits Unity exception information to Raygun.io synchronously.

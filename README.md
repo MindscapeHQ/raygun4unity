@@ -28,32 +28,39 @@ The main classes can be found in the Mindscape.Raygun4Unity namespace.
 Usage
 ====================
 
-Raygun4Unity can be used in two main ways: automatically, and manually.
-
-####Automatically
-
-You can setup Raygun4Unity to automatically send all unhandled exceptions with the following single line of code. This code should be placed in a C# script file that will be called in the initialization process of the game.
-
-```
-RaygunClient.Attach("YOUR_APP_API_KEY");
-```
-
-**WARNING** The RaygunClient uses Application.RegisterLogCallback to listen to exceptions. RegisterLogCallback can only have one handler at a time, so if you already are using RegisterLogCallback,
-then you'll want to send the exception information manually within your existing callback.
-
-####Manually
-
-If you already have your own centralized logging system in place, then you many want to send messages to Raygun.io manually within your logging handlers.
-This can be done by createing a new instance of RaygunClient and using one of the Send method overloads. There are 3 different types of data that you can use in the Send methods:
+To send exception messages to your Raygun.io dashboard, create an instance of the RaygunClient by passing your application API key into the constructor. Then call one of the Send methods.
+There are 3 different types of exception data that you can use in the Send methods:
 
 * **Strings** provided by Unity for the error message and stack trace.
 * **Exception** .Net objects. Useful if you need to send handled exceptions in try/catch blocks.
 * **RaygunMessage** Allowing you to fully specify all the data fields that get sent to Raygun.io
 
+If you already have a central place in your game for catching unhandled exceptions (to write the details to a log for example), then that will be a great place to send the exception information to Raygun.io.
+If you aren't currently catching unhandled exceptions in your game, then a good way to do this is by listening to Application.RegisterLogCallback.
+In the following example, Application.RegisterLogCallback has been set up in a MonoBehaviour that will be run during the initialization process of the game.
+In the handler, you can check to see if the type of the log is an exception or error. Alternatively, you could send all types of log messages.
+
 ```
-RaygunClient client = new RaygunClient("YOUR_APP_API_KEY");
-client.Send(e);
+public class Logger : MonoBehaviour
+{
+  void Start ()
+  {
+    Application.RegisterLogCallback(HandleException);
+  }
+
+  private void HandleException(string message, string stackTrace, LogType type)
+  {
+    if (type == LogType.Exception || type == LogType.Error)
+    {
+      RaygunClient client = new RaygunClient("YOUR_APP_API_KEY");
+      client.Send(message, stackTrace);
+    }
+  }
+}
 ```
+
+**WARNING** RegisterLogCallback can only have one handler at a time, so if you already are using RegisterLogCallback,
+then you'll want to send the exception information to Raygun.io within your existing callback.
 
 Options
 ====================
@@ -61,17 +68,16 @@ Options
 ####Application version
 
 The current version of Raygun4Unity does not automatically obtain the application version number. You can however specify this by setting the ApplicationVersion property of the RaygunClient instance.
-If you are using the Attach method, you can get the RaygunClient instance from the static RaygunClient.Current property.
 
 ####User
 
-To keep track of how many users are affected by each exception, you can set the User property of the RaygunClient instance. This can be any id string of your choosing to identify each user.
+To keep track of how many users are affected by each exception, you can set the User or UserInfo property of the RaygunClient instance. The user can be any id string of your choosing to identify each user.
 Ideally, try to use an id that you can use to relate back to an actual user such as a database id, or an email address. If you use an email address, the users gravitars (if found) will displayed on the Raygun.io error dashboards.
-If you are using the Attach method, you can get the RaygunClient instance from the static RaygunClient.Current property.
+The UserInfo property lets you provide additional user information such as their name.
 
 ####Tags and custom data
 
-The Send method overloads allow you to send an optional list of tags or a dictionary of object data. You can use these to provide whatever additional information you want to help you debug exceptions.
+The Send method overloads allow you to send an optional list of tags or/and a dictionary of object data. You can use these to provide whatever additional information you want to help you debug exceptions.
 
 ####Message modifications before sending
 
