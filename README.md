@@ -41,21 +41,21 @@ In the following example, Application.RegisterLogCallback has been set up in a M
 In the handler, you can check to see if the type of the log is an exception or error. Alternatively, you could send all types of log messages.
 
 ```
-public class Logger : MonoBehaviour {
+public class Logger : MonoBehaviour
+{
+  void Start ()
+  {
+    Application.RegisterLogCallback(HandleException);
+  }
 
-	// Use this for initialization
-	void Start () {
-		Application.RegisterLogCallback(HandleException);
-	}
-
-	private void HandleException(string message, string stackTrace, LogType type)
-	{
-		if (type == LogType.Exception || type == LogType.Error)
-		{
-			RaygunClient client = new RaygunClient("YOUR_APP_API_KEY");
-			client.Send(message, stackTrace);
-		}
-	}
+  private void HandleException(string message, string stackTrace, LogType type)
+  {
+    if (type == LogType.Exception || type == LogType.Error)
+    {
+      RaygunClient client = new RaygunClient("YOUR_APP_API_KEY");
+      client.Send(message, stackTrace);
+    }
+  }
 }
 ```
 
