@@ -10,7 +10,7 @@ namespace Mindscape.Raygun4Unity.Messages
     public RaygunClientMessage()
     {
       Name = "Raygun4Unity";
-      Version = "0.1.0.0";
+      Version = "0.2.0.0";
       ClientUrl = @"https://github.com/MindscapeHQ/raygun4unity";
     }
 

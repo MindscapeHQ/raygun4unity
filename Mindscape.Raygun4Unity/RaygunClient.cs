@@ -149,8 +149,6 @@ namespace Mindscape.Raygun4Unity
 
     internal RaygunMessage BuildMessage(string message, string stackTrace, IList<string> tags, IDictionary userCustomData)
     {
-      //exception = StripWrapperExceptions(exception)
-
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
         .SetMachineName(SystemInfo.deviceName)
@@ -166,8 +164,6 @@ namespace Mindscape.Raygun4Unity
 
     internal RaygunMessage BuildMessage(Exception exception, IList<string> tags, IDictionary userCustomData)
     {
-      //exception = StripWrapperExceptions(exception)
-
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
         .SetMachineName(SystemInfo.deviceName)
@@ -219,11 +215,11 @@ namespace Mindscape.Raygun4Unity
         byte[] data = StringToAscii(message);
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers["X-ApiKey"] = _apiKey;
-        new WWW(RaygunSettings.Settings.ApiEndpoint.AbsoluteUri, data, headers);
+        new WWW(new Uri("https://api.raygun.io/entries").AbsoluteUri, data, headers);
       }
-      catch (Exception e)
+      catch (Exception ex)
       {
-        RaygunClient.Log(string.Format("Error Logging Exception to Raygun.io {0}", e.Message)); 
+        RaygunClient.Log(string.Format("Error Logging Exception to Raygun.io {0}", ex.Message)); 
       }
     }
 
