@@ -1,6 +1,19 @@
 Raygun4Unity
 ============
 
+Supported platforms
+====================
+
+Raygun4Unity has been tested to work on:
+
+* Windows 7 - 8.1
+* Windows Phone 8 - 8.1
+* Mac
+* iOS
+* Android
+
+Raygun4Unity does not work in Web Player or Windows Store apps, most likely due to sand boxing preventing messages to be sent.
+
 Where is my app API key?
 ====================
 
@@ -63,3 +76,4 @@ The Send method overloads allow you to send an optional list of tags or a dictio
 ####Message modifications before sending
 
 By listening to the RaygunClient.SendingMessage event, you can make modifications to any part of the message just before it is serialized and sent to Raygun.io.
+Setting e.Cancel = true will prevent Raygun4Unity from sending the message. This is useful for filtering out types of exceptions that you don't want.
