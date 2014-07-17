@@ -6,8 +6,8 @@ Supported platforms
 
 Raygun4Unity has been tested to work on:
 
-* Windows 7 - 8.1
-* Windows Phone 8 - 8.1
+* Windows Desktop
+* Windows Phone
 * Mac
 * iOS
 * Android
