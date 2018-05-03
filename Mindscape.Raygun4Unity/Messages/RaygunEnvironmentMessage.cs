@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Mindscape.Raygun4Unity.Messages
 {
@@ -24,7 +25,7 @@ namespace Mindscape.Raygun4Unity.Messages
         FullScreen = Screen.fullScreen;
         Orientation = Screen.orientation.ToString();
 
-        LoadedLevelName = Application.loadedLevelName;
+        LoadedLevelName = SceneManager.GetActiveScene().name;
 
         ProcessorCount = SystemInfo.processorCount;
         Cpu = SystemInfo.processorType;
@@ -49,12 +50,12 @@ namespace Mindscape.Raygun4Unity.Messages
         SupportsGyroscope = SystemInfo.supportsGyroscope;
         SupportsInstancing = SystemInfo.supportsInstancing;
         SupportsLocationService = SystemInfo.supportsLocationService;
-        SupportsRenderTextures = SystemInfo.supportsRenderTextures;
+        SupportsRenderTextures = true;
         SupportsRenderToCubemap = SystemInfo.supportsRenderToCubemap;
         SupportsShadows = SystemInfo.supportsShadows;
         SupportsSparseTextures = SystemInfo.supportsSparseTextures;
-        SupportsStencil = SystemInfo.supportsStencil;
-        SupportsVertexPrograms = SystemInfo.supportsVertexPrograms;
+        SupportsStencil = 1;
+        SupportsVertexPrograms = true;
         SupportsVibration = SystemInfo.supportsVibration;
       }
       catch (Exception ex)
