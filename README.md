@@ -65,21 +65,21 @@ public class Logger : MonoBehaviour
 Options
 ====================
 
-####Application version
+### Application version
 
 The current version of Raygun4Unity does not automatically obtain the application version number. You can however specify this by setting the ApplicationVersion property of the RaygunClient instance.
 
-####User
+### User
 
 To keep track of how many users are affected by each exception, you can set the User or UserInfo property of the RaygunClient instance. The user can be any id string of your choosing to identify each user.
 Ideally, try to use an id that you can use to relate back to an actual user such as a database id, or an email address. If you use an email address, the users gravitars (if found) will displayed on the Raygun error dashboards.
 The UserInfo property lets you provide additional user information such as their name.
 
-####Tags and custom data
+### Tags and custom data
 
 The Send method overloads allow you to send an optional list of tags or/and a dictionary of object data. You can use these to provide whatever additional information you want to help you debug exceptions.
 
-####Message modifications before sending
+### Message modifications before sending
 
 By listening to the RaygunClient.SendingMessage event, you can make modifications to any part of the message just before it is serialized and sent to Raygun.
 Setting e.Cancel = true will prevent Raygun4Unity from sending the message. This is useful for filtering out types of exceptions that you don't want.
