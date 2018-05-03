@@ -21,7 +21,7 @@ namespace Mindscape.Raygun4Unity.Messages
         ResolutionWidth = Screen.currentResolution.width;
         ResolutionHeight = Screen.currentResolution.height;
         RefreshRate = Screen.currentResolution.refreshRate;
-        ShowCursor = Screen.showCursor;
+        ShowCursor = Cursor.visible;
         FullScreen = Screen.fullScreen;
         Orientation = Screen.orientation.ToString();
 
