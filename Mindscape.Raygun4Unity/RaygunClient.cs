@@ -186,18 +186,7 @@ namespace Mindscape.Raygun4Unity
       {
         RaygunClient.Log(string.Format("Error Logging Exception to Raygun {0}", ex.Message)); 
       }
-    }
-
-    private static byte[] StringToAscii(string s)
-    {
-      byte[] retval = new byte[s.Length];
-      for (int i = 0; i < s.Length; i++)
-      {
-        char ch = s[i];
-        retval[i] = ch <= 0x7f ? (byte)ch : (byte)'?';
-      }
-      return retval;
-    }
+    }    
 
     internal static void Log(string message)
     {
