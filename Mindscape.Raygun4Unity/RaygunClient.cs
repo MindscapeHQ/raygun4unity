@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using Mindscape.Raygun4Unity.Messages;
-using UnityEngine;
 
 namespace Mindscape.Raygun4Unity
 {
@@ -56,7 +55,7 @@ namespace Mindscape.Raygun4Unity
     public RaygunIdentifierMessage UserInfo { get; set; }
 
     /// <summary>
-    /// Gets or sets a custom application version identifier for all error messages sent to the Raygun.io endpoint.
+    /// Gets or sets a custom application version identifier for all error messages sent to the Raygun endpoint.
     /// </summary>
     public string ApplicationVersion { get; set; }
 
@@ -66,7 +65,7 @@ namespace Mindscape.Raygun4Unity
     public event EventHandler<RaygunSendingMessageEventArgs> SendingMessage;
 
     /// <summary>
-    /// Transmits Unity exception information to Raygun.io synchronously.
+    /// Transmits Unity exception information to Raygun.
     /// </summary>
     /// <param name="message">The exception message.</param>
     /// <param name="stackTrace">The stack trace information.</param>
@@ -76,7 +75,7 @@ namespace Mindscape.Raygun4Unity
     }
 
     /// <summary>
-    /// Transmits Unity exception information to Raygun.io synchronously specifying a list of string tags associated
+    /// Transmits Unity exception information to Raygun specifying a list of string tags associated
     /// with the message for identification, as well as sending a key-value collection of custom data.
     /// </summary>
     /// <param name="message">The exception message.</param>
@@ -89,7 +88,7 @@ namespace Mindscape.Raygun4Unity
     }
 
     /// <summary>
-    /// Transmits an exception to Raygun.io synchronously.
+    /// Transmits an exception to Raygun.
     /// </summary>
     /// <param name="exception">The exception to deliver.</param>
     public void Send(Exception exception)
@@ -98,7 +97,7 @@ namespace Mindscape.Raygun4Unity
     }
 
     /// <summary>
-    /// Transmits an exception to Raygun.io synchronously specifying a list of string tags associated
+    /// Transmits an exception to Raygun specifying a list of string tags associated
     /// with the message for identification, as well as sending a key-value collection of custom data.
     /// </summary>
     /// <param name="exception">The exception to deliver.</param>
@@ -113,7 +112,7 @@ namespace Mindscape.Raygun4Unity
     {
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
-        .SetMachineName(SystemInfo.deviceName)
+        .SetMachineName(UnityEngine.SystemInfo.deviceName)
         .SetExceptionDetails(message, stackTrace)
         .SetClientDetails()
         .SetVersion(ApplicationVersion)
@@ -128,7 +127,7 @@ namespace Mindscape.Raygun4Unity
     {
       RaygunMessage raygunMessage = RaygunMessageBuilder.New
         .SetEnvironmentDetails()
-        .SetMachineName(SystemInfo.deviceName)
+        .SetMachineName(UnityEngine.SystemInfo.deviceName)
         .SetExceptionDetails(exception)
         .SetClientDetails()
         .SetVersion(ApplicationVersion)
@@ -140,7 +139,7 @@ namespace Mindscape.Raygun4Unity
     }
 
     /// <summary>
-    /// Posts a RaygunMessage to the Raygun.io api endpoint.
+    /// Posts a RaygunMessage to the Raygun api endpoint.
     /// </summary>
     /// <param name="raygunMessage">The RaygunMessage to send. This needs its OccurredOn property
     /// set to a valid DateTime and as much of the Details property as is available.</param>
@@ -174,31 +173,24 @@ namespace Mindscape.Raygun4Unity
     {
       try
       {
-        byte[] data = StringToAscii(message);
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers["X-ApiKey"] = _apiKey;
-        new WWW(new Uri("https://api.raygun.io/entries").AbsoluteUri, data, headers);
+        var request = UnityEngine.Networking.UnityWebRequest.Post("https://api.raygun.com/entries", message);
+        var customUploadHandler = new UnityEngine.Networking.UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(message));
+        customUploadHandler.contentType = "application/json";
+        request.uploadHandler = customUploadHandler;
+
+        request.SetRequestHeader("X-ApiKey", _apiKey);
+
+        request.SendWebRequest();
       }
       catch (Exception ex)
       {
-        RaygunClient.Log(string.Format("Error Logging Exception to Raygun.io {0}", ex.Message)); 
+        RaygunClient.Log(string.Format("Error Logging Exception to Raygun {0}", ex.Message)); 
       }
-    }
-
-    private static byte[] StringToAscii(string s)
-    {
-      byte[] retval = new byte[s.Length];
-      for (int i = 0; i < s.Length; i++)
-      {
-        char ch = s[i];
-        retval[i] = ch <= 0x7f ? (byte)ch : (byte)'?';
-      }
-      return retval;
-    }
+    }    
 
     internal static void Log(string message)
     {
-      Debug.Log("<color=#B90000>Raygun4Unity: </color>" + message);
+      UnityEngine.Debug.Log("<color=#B90000>Raygun4Unity: </color>" + message);
     }
   }
 }
