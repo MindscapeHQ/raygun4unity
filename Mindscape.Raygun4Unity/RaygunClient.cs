@@ -164,7 +164,7 @@ namespace Mindscape.Raygun4Unity
 
     private bool HasValidApiKey()
     {
-      return !string.IsNullOrEmpty(_apiKey) ? true : false;
+      return !string.IsNullOrEmpty(_apiKey);
     }
 
     // Returns true if the message can be sent, false if the sending is canceled.
