@@ -48,7 +48,7 @@ namespace Mindscape.Raygun4Unity
       }
       else if (responseCode == 403)
       {
-        RaygunClient.Log("API Response: Invalid API Key - The value specified in the header X-ApiKey did not match with a user");
+        RaygunClient.Log("API Response: Invalid API Key - The value specified in the header X-ApiKey did not match with an application");
       }
       else if (responseCode == 413)
       {
