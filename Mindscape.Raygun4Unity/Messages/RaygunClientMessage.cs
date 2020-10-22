@@ -5,7 +5,7 @@
     public RaygunClientMessage()
     {
       Name = "Raygun4Unity";
-      Version = "1.1.2019.3";
+      Version = "1.1.2019.4";
       ClientUrl = @"https://github.com/MindscapeHQ/raygun4unity";
     }
 
