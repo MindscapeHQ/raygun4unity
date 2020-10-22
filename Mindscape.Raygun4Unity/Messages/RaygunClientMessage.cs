@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-
-namespace Mindscape.Raygun4Unity.Messages
+﻿namespace Mindscape.Raygun4Unity.Messages
 {
   public class RaygunClientMessage
   {
     public RaygunClientMessage()
     {
       Name = "Raygun4Unity";
-      Version = "1.1.2019.3";
+      Version = "1.1.2019.4";
       ClientUrl = @"https://github.com/MindscapeHQ/raygun4unity";
     }
 
