@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-
-namespace Mindscape.Raygun4Unity.Messages
+﻿namespace Mindscape.Raygun4Unity.Messages
 {
   public class RaygunClientMessage
   {
