@@ -69,11 +69,11 @@ Options
 
 The current version of Raygun4Unity does not automatically obtain the application version number. You can however specify this by setting the ApplicationVersion property of the RaygunClient instance.
 
-### User
+### Customers
 
-To keep track of how many users are affected by each exception, you can set the User or UserInfo property of the RaygunClient instance. The user can be any id string of your choosing to identify each user.
-Ideally, try to use an id that you can use to relate back to an actual user such as a database id, or an email address. If you use an email address, the users gravitars (if found) will displayed on the Raygun error dashboards.
-The UserInfo property lets you provide additional user information such as their name.
+To keep track of how many customers are affected by each exception, you can set the `User` or `UserInfo` property of the RaygunClient instance. The customer can be any id string of your choosing to identify each customer.
+Ideally, try to use an id that you can use to relate back to an actual customer such as a database id, or an email address. If you use an email address, the customer gravitars (if found) will displayed on the Raygun error dashboards.
+The `UserInfo` property lets you provide additional customer information such as their name.
 
 ### Tags and custom data
 
