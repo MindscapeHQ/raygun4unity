@@ -4,9 +4,9 @@
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyTitle>Mindscape.Raygun4Unity</AssemblyTitle>
-    <Company>Mindscape</Company>
+    <Company>Raygun</Company>
     <Product>Mindscape.Raygun4Unity</Product>
-    <Copyright>Copyright © Mindscape 2014</Copyright>
+    <Copyright>Copyright © Raygun Ltd 2023</Copyright>
     <AssemblyVersion>0.2.0.0</AssemblyVersion>
     <FileVersion>0.2.0.0</FileVersion>
   </PropertyGroup>
