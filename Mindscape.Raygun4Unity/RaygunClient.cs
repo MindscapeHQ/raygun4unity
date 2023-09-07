@@ -100,7 +100,7 @@ namespace Mindscape.Raygun4Unity
     /// <param name="raygunMessage">The RaygunMessage to send. This needs its OccurredOn property
     /// set to a valid DateTime and as much of the Details property as is available.</param>
     public void Send(RaygunMessage raygunMessage)
-    {  
+    {
       bool shouldSend = OnSendingMessage(raygunMessage);
 
       if (!shouldSend)
@@ -182,7 +182,7 @@ namespace Mindscape.Raygun4Unity
 
       return result;
     }
-    
+
     internal static void Log(string message)
     {
       UnityEngine.Debug.Log("<color=#B90000>Raygun4Unity: </color>" + message);

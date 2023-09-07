@@ -85,12 +85,12 @@ namespace Mindscape.Raygun4Unity
  class JsonArray : List<object>
   {
     /// <summary>
-    /// Initializes a new instance of the <see cref="JsonArray"/> class. 
+    /// Initializes a new instance of the <see cref="JsonArray"/> class.
     /// </summary>
     public JsonArray() { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="JsonArray"/> class. 
+    /// Initializes a new instance of the <see cref="JsonArray"/> class.
     /// </summary>
     /// <param name="capacity">The capacity of the json array.</param>
     public JsonArray(int capacity) : base(capacity) { }

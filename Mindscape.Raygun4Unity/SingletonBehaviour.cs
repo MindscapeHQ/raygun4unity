@@ -12,17 +12,17 @@ namespace Mindscape.Raygun4Unity
     {
       get
       {
-        if (_applicationIsQuitting) 
+        if (_applicationIsQuitting)
         {
           return null;
         }
-  
+
         lock(_lock)
         {
           if (_instance == null)
           {
             _instance = (T)FindObjectOfType(typeof(T));
-          
+
             if (_instance == null)
             {
               GameObject singleton = new GameObject();
@@ -37,7 +37,7 @@ namespace Mindscape.Raygun4Unity
       }
     }
 
-    public virtual void Awake() 
+    public virtual void Awake()
     {
       DontDestroyOnLoad(this.gameObject);
     }

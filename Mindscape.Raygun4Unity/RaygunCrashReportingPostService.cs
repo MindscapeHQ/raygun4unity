@@ -19,7 +19,7 @@ namespace Mindscape.Raygun4Unity
       {
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("X-ApiKey", apiKey);
-        
+
         request.uploadHandler = new UploadHandlerRaw(payload);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.method = UnityWebRequest.kHttpVerbPOST;
@@ -30,7 +30,7 @@ namespace Mindscape.Raygun4Unity
         {
           yield return new WaitForEndOfFrame();
         }
-        
+
         if (requestOperation.webRequest.error != null)
         {
           RaygunClient.Log("Error occurred during report delivery: " + requestOperation.webRequest.error);
